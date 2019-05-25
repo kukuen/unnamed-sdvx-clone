@@ -64,7 +64,7 @@ public:
 	List<Event> m_pendingChanges;
 	mutex m_pendingChangesLock;
 
-	static const int32 m_version = 10;
+	static const int32 m_version = 11;
 
 public:
 	MapDatabase_Impl(MapDatabase& outer) : m_outer(outer)
@@ -117,6 +117,11 @@ public:
 			{
 				m_database.Exec("ALTER TABLE Scores ADD COLUMN timestamp INTEGER");
 				gotVersion = 10;
+			}
+			if (gotVersion == 10)  //upgrade from 10 to 11
+			{
+				m_database.Exec("ALTER TABLE Difficulties ADD COLUMN adjustoffset INTEGER");
+				gotVersion = 11;
 			}
 			m_database.Exec(Utility::Sprintf("UPDATE Database SET `version`=%d WHERE `rowid`=1", m_version));
 		}
@@ -480,6 +485,37 @@ public:
 
 	}
 
+
+	int GetAdjustOffset(const DifficultyIndex& diff)
+	{
+		DBStatement getOffset = m_database.Query("SELECT adjustoffset FROM Difficulties WHERE rowid = ?");
+		getOffset.BindInt(0, diff.id);
+		if (getOffset.Step())
+		{
+			return getOffset.IntColumn(0);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	void UpdateAdjustOffset(const DifficultyIndex& diff, int offset)
+	{
+		DBStatement updateOffset = m_database.Query("UPDATE Difficulties SET adjustoffset = ? WHERE rowid = ?");
+
+		m_database.Exec("BEGIN");
+
+		updateOffset.BindInt(1, offset);
+		updateOffset.BindInt(2, diff.id);
+
+		updateOffset.Step();
+		updateOffset.Rewind();
+
+		m_database.Exec("END");
+	}
+
+
 private:
 	void m_CleanupMapIndex()
 	{
@@ -504,7 +540,7 @@ private:
 			"(artist TEXT, title TEXT, tags TEXT, path TEXT)");
 
 		m_database.Exec("CREATE TABLE Difficulties"
-			"(metadata BLOB, path TEXT, lwt INTEGER, mapid INTEGER,"
+			"(metadata BLOB, path TEXT, lwt INTEGER, mapid INTEGER, adjustoffset INTEGER,"
 			"FOREIGN KEY(mapid) REFERENCES Maps(rowid))");
 
 		m_database.Exec("CREATE TABLE Scores"
@@ -783,4 +819,12 @@ void MapDatabase::RemoveSearchPath(const String& path)
 void MapDatabase::AddScore(const DifficultyIndex& diff, int score, int crit, int almost, int miss, float gauge, uint32 gameflags, Vector<SimpleHitStat> simpleHitStats, uint64 timestamp)
 {
 	m_impl->AddScore(diff, score, crit, almost, miss, gauge, gameflags, simpleHitStats, timestamp);
+}
+int MapDatabase::GetAdjustOffset(const DifficultyIndex& diff)
+{
+	return m_impl->GetAdjustOffset(diff);
+}
+void MapDatabase::UpdateAdjustOffset(const DifficultyIndex& diff, int offset)
+{
+	return m_impl->UpdateAdjustOffset(diff, offset);
 }

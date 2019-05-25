@@ -88,6 +88,8 @@ public:
 	void AddSearchPath(const String& path);
 	void AddScore(const DifficultyIndex& diff, int score, int crit, int almost, int miss, float gauge, uint32 gameflags, Vector<SimpleHitStat> simpleHitStats, uint64 timestamp);
 	void RemoveSearchPath(const String& path);
+	int GetAdjustOffset(const DifficultyIndex& diff);
+	void UpdateAdjustOffset(const DifficultyIndex& diff, int offset);
 
 
 	Delegate<String> OnSearchStatusUpdated;
