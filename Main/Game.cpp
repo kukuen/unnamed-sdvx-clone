@@ -109,6 +109,8 @@ private:
 	// The play field
 	Track* m_track = nullptr;
 
+	float m_adjustOffset = 0;
+
 	// The camera watching the playfield
 	Camera m_camera;
 
@@ -955,7 +957,7 @@ public:
 		const BeatmapSettings& beatmapSettings = m_beatmap->GetMapSettings();
 
 		// Update beatmap playback
-		MapTime playbackPositionMs = m_audioPlayback.GetPosition() - m_audioOffset;
+		MapTime playbackPositionMs = m_audioPlayback.GetPosition() - m_audioOffset - m_adjustOffset;
 		m_playback.Update(playbackPositionMs);
 
 		MapTime delta = playbackPositionMs - m_lastMapTime;
@@ -1005,21 +1007,21 @@ public:
 		// Get the current timing point
 		m_currentTiming = &m_playback.GetCurrentTimingPoint();
 
-
-		// Update hispeed
 		if (g_input.GetButton(Input::Button::BT_S))
 		{
-			for (int i = 0; i < 2; i++)
+			// Update offset
+			float changeOffset = g_input.GetInputLaserDir(0) * 20.0f;
+			m_adjustOffset += changeOffset;
+
+			// Update hispeed
+			float change = g_input.GetInputLaserDir(1) / 3.0f;
+			m_hispeed += change;
+			m_hispeed = Math::Clamp(m_hispeed, 0.1f, 16.f);
+			if ((m_usecMod || m_usemMod) && change != 0.0f)
 			{
-				float change = g_input.GetInputLaserDir(i) / 3.0f;
-				m_hispeed += change;
-				m_hispeed = Math::Clamp(m_hispeed, 0.1f, 16.f);
-				if ((m_usecMod || m_usemMod) && change != 0.0f)
-				{
-					g_gameConfig.Set(GameConfigKeys::ModSpeed, m_hispeed * (float)m_currentTiming->GetBPM());
-					m_modSpeed = m_hispeed * (float)m_currentTiming->GetBPM();
-					m_playback.cModSpeed = m_modSpeed;
-				}
+				g_gameConfig.Set(GameConfigKeys::ModSpeed, m_hispeed * (float)m_currentTiming->GetBPM());
+				m_modSpeed = m_hispeed * (float)m_currentTiming->GetBPM();
+				m_playback.cModSpeed = m_modSpeed;
 			}
 		}
 
@@ -1073,6 +1075,10 @@ public:
 		//progress
 		lua_pushstring(m_lua, "progress");
 		lua_pushnumber(m_lua, Math::Clamp((float)playbackPositionMs / m_endTime,0.f,1.f));
+		lua_settable(m_lua, -3);
+		//adjust offset
+		lua_pushstring(m_lua, "adjustOffset");
+		lua_pushnumber(m_lua, m_adjustOffset);
 		lua_settable(m_lua, -3);
 		//hispeed
 		lua_pushstring(m_lua, "hispeed");
