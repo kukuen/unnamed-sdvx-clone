@@ -1630,6 +1630,21 @@ public:
 				FinishGame();
 			}
 		}
+
+		// adjust offset by tapping the beat
+		if ((buttonCode == Input::Button::FX_0 || buttonCode == Input::Button::FX_1) && g_input.GetButton(Input::Button::BT_S)) {
+			MapTime playbackPositionMs = m_audioPlayback.GetPosition() - m_audioOffset;
+			const TimingPoint* tp = m_playback.GetTimingPointAt(playbackPositionMs);
+
+			float beat = (playbackPositionMs - tp->time) / tp->beatDuration;
+			float closestBeatTime = round(beat) * tp->beatDuration + tp->time;
+
+			float delta = playbackPositionMs - closestBeatTime;
+
+			float adjustRatio = 0.5f;
+
+			m_adjustOffset = m_adjustOffset * adjustRatio + delta * (1 - adjustRatio);
+		}
 	}
 	int m_getClearState()
 	{
