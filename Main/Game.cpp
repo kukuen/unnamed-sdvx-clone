@@ -177,7 +177,7 @@ public:
 		m_modSpeed = g_gameConfig.GetFloat(GameConfigKeys::ModSpeed);
 	}
 
-	Game_Impl(const DifficultyIndex& difficulty, GameFlags flags)
+	Game_Impl(const DifficultyIndex& difficulty, GameFlags flags, int adjustOffset)
 	{
 		// Store path to map
 		m_mapPath = Path::Normalize(difficulty.path);
@@ -190,6 +190,7 @@ public:
         m_usemMod = g_gameConfig.GetBool(GameConfigKeys::UseMMod);
         m_usecMod = g_gameConfig.GetBool(GameConfigKeys::UseCMod);
         m_modSpeed = g_gameConfig.GetFloat(GameConfigKeys::ModSpeed);
+		m_adjustOffset = adjustOffset;
 	}
 	~Game_Impl()
 	{
@@ -1762,12 +1763,16 @@ public:
 	{
 		return m_diffIndex;
 	}
+	virtual int GetAdjustOffset()
+	{
+		return m_adjustOffset;
+	}
 
 };
 
-Game* Game::Create(const DifficultyIndex& difficulty, GameFlags flags)
+Game* Game::Create(const DifficultyIndex& difficulty, GameFlags flags, int adjustOffset)
 {
-	Game_Impl* impl = new Game_Impl(difficulty, flags);
+	Game_Impl* impl = new Game_Impl(difficulty, flags, adjustOffset);
 	return impl;
 }
 

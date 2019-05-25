@@ -1156,7 +1156,7 @@ public:
 				{
 					DifficultyIndex* diff = m_selectionWheel->GetSelectedDifficulty();
 
-					Game* game = Game::Create(*diff, m_settingsWheel->GetGameFlags());
+					Game* game = Game::Create(*diff, m_settingsWheel->GetGameFlags(), m_mapDatabase.GetAdjustOffset(*diff));
 					if (!game)
 					{
 						Logf("Failed to start game", Logger::Error);

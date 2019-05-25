@@ -489,7 +489,7 @@ public:
 	int GetAdjustOffset(const DifficultyIndex& diff)
 	{
 		DBStatement getOffset = m_database.Query("SELECT adjustoffset FROM Difficulties WHERE rowid = ?");
-		getOffset.BindInt(0, diff.id);
+		getOffset.BindInt(1, diff.id);
 		if (getOffset.Step())
 		{
 			return getOffset.IntColumn(0);

@@ -39,7 +39,7 @@ protected:
 	Game() = default;
 public:
 	virtual ~Game() = default;
-	static Game* Create(const DifficultyIndex& mapPath, GameFlags flags);
+	static Game* Create(const DifficultyIndex& mapPath, GameFlags flags, int adjustOffset);
 	static Game* Create(const String& mapPath, GameFlags flags);
 
 public:
@@ -67,6 +67,7 @@ public:
 	virtual const String& GetMapRootPath() const = 0;
 	// Full path to map
 	virtual const String& GetMapPath() const = 0;
+	virtual int GetAdjustOffset() = 0;
 
 
 };

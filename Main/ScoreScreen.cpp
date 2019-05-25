@@ -137,6 +137,8 @@ public:
 				Shared::Time::Now().Data());
 		}
 
+		m_mapDatabase.UpdateAdjustOffset(game->GetDifficultyIndex(), game->GetAdjustOffset());
+
 		// Used for jacket images
 
 		m_startPressed = false;
