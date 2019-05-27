@@ -959,6 +959,7 @@ public:
 
 		// Update beatmap playback
 		MapTime playbackPositionMs = m_audioPlayback.GetPosition() - m_audioOffset - m_adjustOffset;
+		if (playbackPositionMs < m_lastMapTime) playbackPositionMs = m_lastMapTime;
 		m_playback.Update(playbackPositionMs);
 
 		MapTime delta = playbackPositionMs - m_lastMapTime;
