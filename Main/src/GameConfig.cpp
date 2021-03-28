@@ -219,6 +219,10 @@ void GameConfig::InitDefaults()
 	Set(GameConfigKeys::GameplaySettingsDialogLastTab, 0);
 	Set(GameConfigKeys::TransferScoresOnChartUpdate, true);
 	Set(GameConfigKeys::UpdateChannel, "master");
+
+
+	Set(GameConfigKeys::FeedbackPort, "COM3");
+	Set(GameConfigKeys::FeedbackEnabled, true);
 }
 
 void GameConfig::UpdateVersion()

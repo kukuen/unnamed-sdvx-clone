@@ -169,7 +169,13 @@ DefineEnum(GameConfigKeys,
 		   MirrorChart,
 		   RandomizeChart,
 			  
-		   UpdateChannel)
+		   UpdateChannel,
+			   
+		
+			// feedback options
+			FeedbackPort,
+			FeedbackEnabled
+		)
 
 DefineEnum(GaugeTypes,
 		   Normal,
