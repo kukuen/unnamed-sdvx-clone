@@ -3,6 +3,7 @@
 #include "SongSort.hpp"
 #include "SongFilter.hpp"
 #include <Beatmap/MapDatabase.hpp>
+#include "FeedbackManager.hpp";
 
 class TextInput
 {
@@ -371,6 +372,7 @@ public:
 		}
 
 		SelectItemBySortIndex(newIndex);
+		g_feedbackManager->slam();
 	}
 
 	virtual void AdvancePage(int32 direction)

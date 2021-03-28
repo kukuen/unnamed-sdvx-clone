@@ -23,6 +23,7 @@
 #include "SkinConfig.hpp"
 #include "SkinHttp.hpp"
 #include "ShadedMesh.hpp"
+#include "FeedbackManager.hpp"
 
 #ifdef EMBEDDED
 #define NANOVG_GLES2_IMPLEMENTATION
@@ -49,6 +50,7 @@ Application *g_application = nullptr;
 JobSheduler *g_jobSheduler = nullptr;
 TransitionScreen *g_transition = nullptr;
 Input g_input;
+FeedbackManager* g_feedbackManager = nullptr;
 
 // Tickable queue
 static Vector<IApplicationTickable *> g_tickables;
@@ -723,6 +725,8 @@ bool Application::m_Init()
 	// Load config
 	if (!m_LoadConfig())
 		Log("Failed to load config file", Logger::Severity::Warning);
+
+	g_feedbackManager = new FeedbackManager();
 
 	// Job sheduler
 	g_jobSheduler = new JobSheduler();

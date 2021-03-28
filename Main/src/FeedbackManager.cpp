@@ -32,6 +32,10 @@ FeedbackManager::FeedbackManager() {
 			printf("ERROR!!!");
 		}
 	}
+	else {
+
+		connected = true;
+	}
 }
 
 FeedbackManager::~FeedbackManager()
