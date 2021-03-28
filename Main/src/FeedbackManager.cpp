@@ -49,8 +49,8 @@ FeedbackManager::~FeedbackManager()
 
 
 void FeedbackManager::slam() {
-	const char buffer[1] = { 0x01 };
-	WriteData(buffer, 1);
+	const char buffer[3] = { 0x01,0x01,0x01 };
+	WriteData(buffer, 3);
 }
 
 
