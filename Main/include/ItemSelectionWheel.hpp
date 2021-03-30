@@ -372,7 +372,7 @@ public:
 		}
 
 		SelectItemBySortIndex(newIndex);
-		g_feedbackManager->slam();
+		g_feedbackManager->slam(FeedbackLaser::Right);
 	}
 
 	virtual void AdvancePage(int32 direction)

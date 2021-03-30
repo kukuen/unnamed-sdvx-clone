@@ -48,11 +48,19 @@ FeedbackManager::~FeedbackManager()
 }
 
 
-void FeedbackManager::slam() {
-	const char buffer[3] = { 0x01,0x01,0x01 };
-	WriteData(buffer, 3);
+void FeedbackManager::slam(FeedbackLaser laser) {
+	const char buffer[2] = { getLaserCode(laser), 0 };
+	WriteData(buffer, 2);
 }
 
+char FeedbackManager::getLaserCode(FeedbackLaser laser) {
+	if (laser == FeedbackLaser::Left) {
+		return 1;
+	}
+	else {
+		return 2;
+	}
+}
 
 bool FeedbackManager::WriteData(const char *buffer, unsigned int nbChar)
 {
