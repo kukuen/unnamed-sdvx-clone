@@ -2,13 +2,19 @@
 
 #include "stdafx.h"
 
+DefineEnum(
+	FeedbackLaser,
+	Left,
+	Right
+)
+
 class FeedbackManager {
 
 public:
 	FeedbackManager();
 	~FeedbackManager();
 
-	void slam();
+	void slam(FeedbackLaser laser);
 
 private:
 	HANDLE hSerial;
@@ -17,4 +23,6 @@ private:
     String port;
 
 	bool WriteData(const char *buffer, unsigned int nbChar);
+
+	static char getLaserCode(FeedbackLaser laser);
 };

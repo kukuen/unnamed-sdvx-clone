@@ -23,6 +23,7 @@
 #include "PreviewPlayer.hpp"
 #include "ItemSelectionWheel.hpp"
 #include "Audio/OffsetComputer.hpp"
+#include "FeedbackManager.hpp";
 
 /*
 	Song preview player with fade-in/out
@@ -1681,6 +1682,16 @@ public:
 				m_selectionWheel->AdvanceDifficultySelection(advanceDiffActual);
 			if (advanceSongActual != 0)
 				m_selectionWheel->AdvanceSelection(advanceSongActual);
+		}
+
+		if (advanceDiffActual != 0)
+		{
+			g_feedbackManager->slam(FeedbackLaser::Left);
+		}
+
+		if (advanceSongActual != 0)
+		{
+			g_feedbackManager->slam(FeedbackLaser::Right);
 		}
 
 		m_advanceDiff -= advanceDiffActual;
