@@ -29,6 +29,8 @@
 #include "PracticeModeSettingsDialog.hpp"
 #include "Audio/OffsetComputer.hpp"
 
+#include "FeedbackManager.hpp";
+
 #include <SDL2/SDL.h>
 
 // Try load map helper
@@ -1888,6 +1890,8 @@ public:
 		float direction = Math::Sign(slamSize);
 		m_camera.AddCameraShake(slamSize);
 		m_slamSample->Play();
+		
+		g_feedbackManager->slam(object->index == 0 ? FeedbackLaser::Left : FeedbackLaser::Right);
 
 		if (object->spin.type != 0)
 		{

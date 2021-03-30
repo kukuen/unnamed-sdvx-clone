@@ -55,10 +55,10 @@ void FeedbackManager::slam(FeedbackLaser laser) {
 
 char FeedbackManager::getLaserCode(FeedbackLaser laser) {
 	if (laser == FeedbackLaser::Left) {
-		return 1;
+		return 2;
 	}
 	else {
-		return 2;
+		return 1;
 	}
 }
 
