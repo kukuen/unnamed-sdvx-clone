@@ -20,10 +20,10 @@ void setup() {
   selectBus(2);
   initDrv();
   play();
-  
+
   selectBus(3);
-  initDrv();  
-  play();  
+  initDrv();
+  play();
 }
 
 void initDrv() {
@@ -55,29 +55,29 @@ void loop() {
 
   while(Serial.available()) {
     size_t count = Serial.readBytesUntil(0, buf, 32);
-    if(count == 1) {  
+    if(count == 1) {
       if(buf[0] == 0x01) {
-        selectBus(2);      
+        selectBus(2);
       } else {
         selectBus(3);
       }
-      
+
       play();
     }
   }
-  delay(1);    
+  delay(1);
 }
 
 
 void __loop() {
-  
+
   selectBus(2);
   play();
 
  delay(100);
-  
+
   selectBus(3);
   play();
-  
+
  delay(100);
 }
